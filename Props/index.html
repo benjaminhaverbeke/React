@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        // Version déconstruction
+        /*
+        function Hello({prenom, nom}) {
+            return (
+                <div>
+                    <h1>Hello {prenom} {nom}</h1>
+                    <p>Comment vas-tu ?</p>
+                </div>
+            );
+        }
+        */
+        function Hello(props) {
+            console.log(props);
+    
+            return (
+                <div>
+                    <h1>Hello {props.prenom} {props.nom}</h1>
+                    <p>Comment vas-tu ?</p>
+                </div>
+            );
+        }
+
+        ReactDOM.render(
+            <div>
+                <Hello prenom="Fabrice" nom="Montagne" />
+                <Hello prenom="Robert" nom="Durant" />
+            </div>,
+            document.getElementById('root')
+        )
+    </script>
+</body>
+</html>
