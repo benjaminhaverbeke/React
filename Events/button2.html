@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+    const Button = () => {
+        const [hasClicked, setHasClicked] = React.useState(false);
+
+        const handleClick = () => {
+            setHasClicked(true);
+        }
+
+        return (
+            <React.Fragment>
+                {
+                    hasClicked && (
+                        <p>C'est envoyé</p>
+                    )
+                }
+                <button onClick={handleClick}>
+                    Envoyer
+                </button>
+            </React.Fragment>
+        );
+    }
+
+    ReactDOM.render(
+        <Button />,
+        document.getElementById('root')
+    );
+    </script>
+</body>
+</html>

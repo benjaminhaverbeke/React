@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+
+
+    const Diapo = () => {
+        
+        const images = [
+    {
+        name: "chat1",
+        src: "https://www.la-spa.fr/app/app/uploads/2023/07/prendre-soin_duree-vie-chat.jpg"
+    },
+    {
+        name: "chat2",
+        src: "https://www.everland-petfood.com/wp-content/uploads/AdobeStock_203576107.jpeg"
+    },
+    {
+        name: "chat3",
+        src: "https://www.assuropoil.fr/wp-content/uploads/2023/07/avoir-un-chat-sante.jpg"
+    }
+        
+    ]
+        const [index, setIndex] = React.useState(0)
+        const time = setTimeout(() => {
+            
+            if(index >= images.length -1){
+               setIndex(0); 
+            }
+            else{
+                setIndex(index+1)
+            }
+            
+        
+        }, 3000)
+
+        return(
+            
+                <div>
+                    <h2>{images[index].name}</h2>
+                    <img src={images[index].src} />
+                    </div>
+                
+        )
+    }
+
+    ReactDOM.render(
+        <Diapo />,
+        document.getElementById('root')
+    );
+    </script>
+</body>
+</html>
