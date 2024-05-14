@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+    
+    const { useState } = React;
+/*
+Créer un App avec 2 composants :
+- FormAnimal : Un formulaire pour créer un animal : famille, espece, prenom, age
+- TableauAnimaux : Un tableau d'animaux avec les mêmes champs que le formulaire
+
+Faire le JSX et le state (qui gère les données) de chaque composant.
+Et un peu de CSS pour ceux en avance.
+
+Utiliser les données suivantes pour tester le tableau
+*/
+const animaux = [{
+    famille: 'Canidés',
+    espece: 'Chiwawa',
+    age: 1,
+    prenom: 'Nougat'
+},{
+    famille: 'Canidés',
+    espece: 'Boxer',
+    age: 8,
+    prenom: 'Peggy'
+},{
+    famille: 'Félidés',
+    espece: 'Lion',
+    age: 2,
+    prenom: 'Léo'
+},{
+    famille: 'Canidés',
+    espece: 'Berger Australien',
+    age: 10,
+    prenom: 'Félix'
+}];
+
+const FormAnimal = () => {
+    
+    const [animal, setAnimal] = React.useState(
+        {
+           famille: '',
+           espece: '',
+           age: 0,
+           prenom: ''
+        });
+       
+        
+    const handleChange = (event) => {
+        
+        const {value, name } = event.target;
+        
+        setAnimal((prevAnimal)=>({
+                ...prevAnimal,
+                [name]: value
+            }));
+            console.log(animal)
+    }
+    
+    const [animalList, SetanimalList] = React.useState([...animaux]);
+ 
+            const handleSubmit = (event) => {
+                
+                event.preventDefault();
+              const currentAnimal = {...animal}
+               SetanimalList([...animalList, currentAnimal])
+            }
+            
+    console.log(animalList)
+    return(
+        <form onSubmit={handleSubmit}>
+        <label htmlFor="familleId">Famille</label>
+        <input type="text" name="famille" id="familleId" value={animal.famille} onChange={handleChange} />
+        
+        <label htmlFor="especeId">Espèce</label>
+        <input type="text" name="espece" id="especeId" value={animal.espece} onChange={handleChange} />
+        
+        <label htmlFor="ageId">Age</label>
+        <input type="number" name="age" id="ageId" value={animal.age} onChange={handleChange} />
+        
+        <label htmlFor="prenomId">Prenom</label>
+        <input type="text" name="prenom" id="prenomId" value={animal.prenom} onChange={handleChange} />
+        <input type="submit" value="Ajouter"/>
+        </form>
+        
+        
+        );
+    
+    
+    
+}
+const TableauAnimal = ({animaux}) => {
+    
+    return(
+        <div>
+        <ul>
+        animaux.map((element, index)=>
+        (<li key={index}>{element.famille}
+        
+        
+        </li>))
+        
+        
+        </ul>
+        </div>
+        
+        
+        );
+    
+}
+
+ const App = () => {
+     
+      
+            return (
+                <React.Fragment>
+                    <FormAnimal />
+                    <TableauAnimal animaux={animaux} />
+                </React.Fragment>
+            );
+        }
+
+
+
+ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>

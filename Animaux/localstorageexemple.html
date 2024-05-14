@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+    
+ 
+    
+const TableauAnimaux = ({animaux, onEditAnimal}) => {
+    return (
+        <table>
+            <thead>
+                <tr>
+                    <th>Famille</th>
+                    <th>Espèce</th>
+                    <th>Age</th>
+                    <th>Prénom</th>
+                </tr>
+            </thead>
+            <tbody>
+                {animaux.map((animal, i) => 
+                    <tr key={i} onClick={() => onEditAnimal(animal)}>
+                        <td>{animal.famille}</td>
+                        <td>{animal.espece}</td>
+                        <td>{animal.age}</td>
+                        <td>{animal.prenom}</td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    );
+}
+
+const FormAnimal = ({state, dispatch}) => {
+    const handleChange = (event) => {
+        const { value, name } = event.target;
+
+        dispatch({type: 'formInputChange', name, value})
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (state.id > 0) {
+            dispatch({type: 'update', animal: state});
+            return;
+        }
+
+        dispatch({type: 'create', animal: state});
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label htmlFor="familleId">Famille</label>
+            <input type="text" name="famille" id="familleId" value={state.famille} onChange={handleChange} />
+
+            <label htmlFor="especeId">Espèce</label>
+            <input type="text" name="espece" id="especeId" value={state.espece} onChange={handleChange}  />
+
+            <label htmlFor="ageId">Age</label>
+            <input type="number" min="0" name="age" id="ageId" value={state.age} onChange={handleChange}  />
+
+            <label htmlFor="prenomId">Prénom</label>
+            <input type="text" name="prenom" id="prenomId" value={state.prenom} onChange={handleChange}  />
+
+            <button>Enregistrer</button>
+        </form>
+    );
+}
+
+const reducer = (state, action) => {
+
+    switch (action.type) {
+        case "formInputChange":
+            const newAnimal = {...state.edittingAnimal};
+            newAnimal[action.name] = action.value;
+            console.log(newAnimal, action)
+            return {
+                ...state,
+                edittingAnimal: newAnimal
+            }
+        case "new":
+            return {...state, edittingAnimal: {
+                famille: '',
+                espece: '',
+                age: 0,
+                prenom: ''
+            }};
+        case "edit":
+            return {...state, edittingAnimal: action.animal};
+        case "create":
+            const animal = {
+                id: state.animaux.length + 1,
+                ...action.animal
+            };
+            return {
+                ...state,
+                animaux: [...state.animaux, animal]
+            };
+        case "update":
+            const animaux = [...state.animaux];
+            const indexToUpdate = state.animaux.findIndex((elt) => elt.id === action.animal.id);
+            animaux[indexToUpdate] = action.animal;
+            return {
+                ...state,
+                animaux: [...animaux]
+            };
+    }
+};
+
+const App = () => {
+    
+    
+    const animaux = JSON.parse(localStorage.getItem('ListeAnimaux'))
+    
+   
+        
+    
+    const [state, dispatch] = React.useReducer(reducer, {
+        animaux: animaux,
+        edittingAnimal: {
+            famille: '',
+            espece: '',
+            age: 0,
+            prenom: ''
+        }
+    });
+
+    
+
+    const handleNewAnimal = () => {
+        dispatch({type: 'new'});
+    }
+
+    const handleEditAnimal = (animal) => {
+        console.log(animal)
+        dispatch({type: 'edit', animal});
+    }
+    
+    React.useEffect(() => {
+  
+  localStorage.setItem("ListeAnimaux", JSON.stringify(state.animaux));
+        
+    }, [state.animaux]);
+
+    
+    return (
+        <React.Fragment>
+            <FormAnimal dispatch={dispatch} state={state.edittingAnimal} />
+            <button onClick={handleNewAnimal}>Ajouter</button>
+            <TableauAnimaux animaux={state.animaux} onEditAnimal={handleEditAnimal} />
+        </React.Fragment>
+    );
+}
+
+ReactDOM.render(
+    <App />,
+    document.getElementById('root')
+);
+</script>
+</body>
+</html>

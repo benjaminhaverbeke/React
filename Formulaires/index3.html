@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const Header = (props) => {
+            const {logoSrc, siteTitle} = props;
+        
+            return (
+                <header>
+                    <img src={logoSrc} />
+                    <h1>{siteTitle}</h1>
+                </header>
+            );
+        }
+        const Footer = (props) => {
+            const {copyright} = props;
+        
+            return (
+                <footer>
+                    <p>{copyright}</p>
+                </footer>
+            );
+        }
+        const ContactForm = () => {
+            /*
+                Exercice 1 : Au clic sur le bouton de soumission du formulaire,
+                afficher les données des champs dans la console, sans utiliser querySelector.
+                Utiliser les state à la place.
+                
+                -> IMPORTANT : Regarder le cours elearning : https://elearning.3wa.fr/mod/page/view.php?id=22222
+            */
+            /*
+                Exercice 2 : Au clic sur le bouton Envoyer, à la place du formulaire,
+                afficher le message : "Demande prise en compte, on revient vers vous bientôt ;)"
+            */
+            const [contact, setContact] = React.useState({
+                lastName: '',
+                firstName: '',
+                age: 0,
+                email: '',
+                phone: '',
+                message: ''
+            });
+            
+            const handleChange = (event) => {
+                const { value, name } = event.target;
+                
+                const newContact = {...contact};// {lastName: contact.lastName, ...}
+                newContact[name] = value;
+                setContact(newContact);
+            }
+            const [submit, setSubmit] = React.useState(false);
+            
+            const handleSubmit = (event) => {
+                console.log(contact);
+                event.preventDefault();
+                setSubmit(true);
+            }
+            
+           console.log(submit)
+            return (
+                <div>{
+                    submit ? (<p>demande prise en compte</p>) : (
+                
+                <form onSubmit={handleSubmit}>
+                    
+                
+                    <label htmlFor="lastNameId">Nom</label>
+                    <input type="text" name="lastName" id="lastNameId" value={contact.lastName} onChange={handleChange} />
+        
+                    <label htmlFor="firstNameId">Prénom</label>
+                    <input type="text" name="firstName" id="firstNameId" value={contact.firstName} onChange={handleChange} />
+        
+                    <label htmlFor="ageId">Age</label>
+                    <input type="number" min="0" name="age" id="ageId" value={contact.age} onChange={handleChange} />
+        
+                    <label htmlFor="emailId">Email</label>
+                    <input type="email" name="email" id="emailId" value={contact.email} onChange={handleChange} />
+        
+                    <label htmlFor="phoneId">Téléphone</label>
+                    <input type="phone" name="phone" id="phoneId" value={contact.phone} onChange={handleChange} />
+        
+                    <label htmlFor="messageId">Message</label>
+                    <textarea name="message" id="messageId" value={contact.message} onChange={handleChange}></textarea>
+
+                    <button>Envoyer</button>
+                </form>)}
+                </div>
+            );
+        }
+        const App = () => {
+            return (
+                <React.Fragment>
+                    <Header logoSrc="logo.png" siteTitle="Un joli site" />
+                    <ContactForm />
+                    <Footer copyright="Nevezide" />
+                </React.Fragment>
+            );
+        }
+
+        ReactDOM.render(
+            <App />,
+            document.getElementById('root')
+        );
+    </script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+    <!-- babel => compilation du JSX -->
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+
+const TableauAnimaux = ({animaux}) => {
+    return (
+        <table>
+            <thead>
+                <tr>
+                    <th>Famille</th>
+                    <th>Espèce</th>
+                    <th>Age</th>
+                    <th>Prénom</th>
+                </tr>
+            </thead>
+            <tbody>
+                {animaux.map((animal, i) => 
+                    <tr key={i}>
+                        <td>{animal.famille}</td>
+                        <td>{animal.espece}</td>
+                        <td>{animal.age}</td>
+                        <td>{animal.prenom}</td>
+                    </tr>
+                )}
+            </tbody>
+        </table>
+    );
+}
+
+const FormAnimal = ({onCreateAnimal}) => {
+    const [animal, setAnimal] = React.useState({
+        famille: '',
+        espece: '',
+        age: 0,
+        prenom: ''
+    });
+
+    const handleChange = (event) => {
+        const { value, name } = event.target;
+        
+        const newAnimal = {...animal};
+        newAnimal[name] = value;
+        setAnimal(newAnimal);
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        onCreateAnimal(animal);
+    };
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label htmlFor="familleId">Famille</label>
+            <input type="text" name="famille" id="familleId" value={animal.famille} onChange={handleChange} />
+
+            <label htmlFor="especeId">Espèce</label>
+            <input type="text" name="espece" id="especeId" value={animal.espece} onChange={handleChange}  />
+
+            <label htmlFor="ageId">Age</label>
+            <input type="number" min="0" name="age" id="ageId" value={animal.age} onChange={handleChange}  />
+
+            <label htmlFor="prenomId">Prénom</label>
+            <input type="text" name="prenom" id="prenomId" value={animal.prenom} onChange={handleChange}  />
+
+            <button>Créer</button>
+        </form>
+    );
+}
+const App = () => {
+    const [animaux, setAnimaux] = React.useState([{
+        famille: 'Canidés',
+        espece: 'Chiwawa',
+        age: 1,
+        prenom: 'Nougat'
+    },{
+        famille: 'Canidés',
+        espece: 'Boxer',
+        age: 8,
+        prenom: 'Peggy'
+    },{
+        famille: 'Félidés',
+        espece: 'Lion',
+        age: 2,
+        prenom: 'Léo'
+    },{
+        famille: 'Canidés',
+        espece: 'Berger Australien',
+        age: 10,
+        prenom: 'Félix'
+    }]);
+    
+    const handleCreateAnimal = (animal) => {
+        setAnimaux(animaux.concat([animal]));
+    }
+
+    return (
+        <React.Fragment>
+            <FormAnimal onCreateAnimal={handleCreateAnimal} />
+            <TableauAnimaux animaux={animaux} />
+        </React.Fragment>
+    );
+}
+
+ReactDOM.render(
+    <App />,
+    document.getElementById('root')
+);
+    </script>
+</body>
+</html>
